@@ -1,0 +1,193 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Add Restaurant Item</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 0;
+            padding: 20px;
+            background-color: #f2f2f2;
+        }
+        .container {
+            max-width: 600px;
+            margin: 0 auto;
+            background-color: #fff;
+            padding: 20px;
+            border-radius: 8px;
+            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+        }
+        h1 {
+            text-align: center;
+        }
+        form {
+            display: flex;
+            flex-direction: column;
+        }
+        label {
+            margin-bottom: 8px;
+        }
+        input, textarea {
+            padding: 8px;
+            margin-bottom: 16px;
+            border: 1px solid #ccc;
+            border-radius: 4px;
+        }
+        button {
+            padding: 10px 20px;
+            background-color: #4CAF50;
+            color: white;
+            border: none;
+            border-radius: 4px;
+            cursor: pointer;
+            transition: background-color 0.3s;
+            align-self: flex-end;
+        }
+        button:hover {
+            background-color: #45a049;
+        }
+        .card-container {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 16px;
+        }
+        .card {
+            border: 1px solid #ccc;
+            padding: 16px;
+            width: calc(33.333% - 32px);
+            box-sizing: border-box;
+            position: relative;
+            display: flex;
+            flex-direction: column;
+            justify-content: space-between;
+        }
+        .card img {
+            width: 100%;
+            height: auto;
+        }
+        .card .button-container {
+            display: flex;
+            justify-content: space-between;
+            margin-top: 8px;
+        }
+        .edit-button {
+            background-color: blue;
+            color: white;
+            border: none;
+            padding: 8px;
+            cursor: pointer;
+            flex: 1;
+            margin-right: 4px;
+        }
+        .delete-button {
+            background-color: red;
+            color: white;
+            border: none;
+            padding: 8px;
+            cursor: pointer;
+            flex: 1;
+            margin-left: 4px;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>Add Restaurant Item</h1>
+        <form id="restaurant-form">
+            <label for="name">Name:</label>
+            <input type="text" id="name" required>
+
+            <label for="price">Price:</label>
+            <input type="number" id="price" required>
+
+            <label for="description">Description:</label>
+            <textarea id="description" rows="4" required></textarea>
+
+            <label for="image">Image</label>
+            <input type="file" id="image" required>
+
+            <button type="button" id="add" onclick="addRestaurantItem()">Add</button>
+            <a href="./product.html"><button type="button" id="add">Show Products</button></a>
+            <br>
+        </form>
+        
+        <div id="restaurant-list" class="card-container"></div>
+    </div>
+
+
+    <script>
+        function addRestaurantItem() {
+            const name = document.getElementById('name').value;
+            const price = document.getElementById('price').value;
+            const description = document.getElementById('description').value;
+            const image = document.getElementById('image').files[0];
+
+            const reader = new FileReader();
+            reader.onload = function(e) {
+                const card = document.createElement('div');
+                card.classList.add('card');
+
+                const img = document.createElement('img');
+                img.src = e.target.result;
+                card.appendChild(img);
+
+                const nameElement = document.createElement('h2');
+                nameElement.textContent = name;
+                card.appendChild(nameElement);
+
+                const priceElement = document.createElement('p');
+                priceElement.textContent = "Price:" + price;
+                card.appendChild(priceElement);
+
+                const descElement = document.createElement('p');
+                descElement.textContent = description;
+                card.appendChild(descElement);
+
+                const buttonContainer = document.createElement('div');
+                buttonContainer.classList.add('button-container');
+
+                const editButton = document.createElement('button');
+                editButton.textContent = 'Edit';
+                editButton.classList.add('edit-button');
+                editButton.onclick = function() {
+                    editRestaurantItem(card, name, price, description, e.target.result);
+                };
+                buttonContainer.appendChild(editButton);
+
+                const deleteButton = document.createElement('button');
+                deleteButton.textContent = 'Delete';
+                deleteButton.classList.add('delete-button');
+                deleteButton.onclick = function() {
+                    card.remove();
+                };
+                buttonContainer.appendChild(deleteButton);
+
+                card.appendChild(buttonContainer);
+
+                document.getElementById('restaurant-list').appendChild(card);
+
+                // Clear form inputs after adding
+                document.getElementById('restaurant-form').reset();
+            };
+            reader.readAsDataURL(image);
+        }
+
+        function editRestaurantItem(card, oldName, oldPrice, oldDescription, oldImage) {
+            const name = prompt("Edit Name:", oldName);
+            const price = prompt("Edit Price:", oldPrice);
+            const description = prompt("Edit Description:", oldDescription);
+            // const image = prompt("Edit Image URL:", oldImage);
+
+            if (name && price && description && image) {
+                card.querySelector('h2').textContent = name;
+                card.querySelector('p:nth-of-type(1)').textContent = "Price: $" + price;
+                card.querySelector('p:nth-of-type(2)').textContent = description;
+                card.querySelector('img').src = image;
+            }
+        }
+    </script>
+    <script type="module" src="./resfunc.js"></script>
+</body>
+</html>

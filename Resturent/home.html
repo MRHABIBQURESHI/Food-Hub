@@ -1,0 +1,26 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="index.css">
+    <title>Home</title>
+</head>
+<body>
+    <div ></div>
+    <div id="welcomeMessage" class="welcome-text"></div>
+    <a href="./res.html" style="text-decoration: none;" id="create-restaurant-button">Create Restaurant</a>
+
+    <script>
+        // Retrieve restaurant name from local storage
+        const ownername = localStorage.getItem('ownername');
+
+        // Display welcome message
+        if (ownername) {
+            document.getElementById('welcomeMessage').innerText = "Welcome, " + ownername;
+        } else {
+            document.getElementById('welcomeMessage').innerText = "Welcome";
+        }
+    </script>
+</body>
+</html>

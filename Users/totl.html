@@ -1,0 +1,299 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Shopping Cart</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background-color: #f4f4f4;
+            color: #333;
+            margin: 0;
+            padding: 20px;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            margin-top: 15ch;
+        }
+
+        #items {
+            width: 100%;
+            max-width: 600px;
+            background: #fff;
+            padding: 20px;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+            border-radius: 8px;
+        }
+
+        .item {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            margin-bottom: 15px;
+            padding: 10px;
+            border-bottom: 1px solid #ddd;
+        }
+
+        .item:last-child {
+            border-bottom: none;
+        }
+
+        .item-name {
+            flex: 1;
+            font-weight: bold;
+        }
+
+        .controls {
+            display: flex;
+            align-items: center;
+        }
+
+        .controls button {
+            background: #007bff;
+            color: white;
+            border: none;
+            padding: 5px 10px;
+            margin: 0 5px;
+            border-radius: 4px;
+            cursor: pointer;
+            transition: background 0.3s;
+        }
+
+        .controls button:hover {
+            background: #0056b3;
+        }
+
+        .controls span {
+            width: 30px;
+            text-align: center;
+        }
+
+        .total {
+            margin-top: 20px;
+            font-size: 1.2em;
+        }
+
+        .total span {
+            font-weight: bold;
+        }
+
+        button.proceed {
+            margin-top: 20px;
+            background: #28a745;
+            color: white;
+            border: none;
+            padding: 10px 20px;
+            font-size: 1em;
+            border-radius: 4px;
+            cursor: pointer;
+            transition: background 0.3s;
+        }
+
+        button.proceed:hover {
+            background: #218838;
+        }
+
+     
+
+.counter {
+    display: flex;
+    align-items: center;
+    border: 1px solid #ccc;
+    border-radius: 5px;
+    background-color: #fff;
+}
+
+button {
+    background-color: #007bff;
+    color: #fff;
+    border: none;
+    padding: 10px 20px;
+    cursor: pointer;
+    font-size: 16px;
+    outline: none;
+    transition: background-color 0.3s;
+}
+
+button:hover {
+    background-color: #0056b3;
+}
+
+button:active {
+    background-color: #004494;
+}
+
+#quantity {
+    padding: 0 20px;
+    font-size: 16px;
+}
+.price-display, .total-display {
+    font-size: 18px;
+    margin-top: 10px;
+}
+    </style>
+</head>
+<body>
+
+    <div id="items">
+        <div class="item">
+            <span class="item-name" id="fnm"></span>
+            <div class="counter">
+                <button id="minus">-</button>
+                <span id="quantity">0</span>
+                <button id="plus">+</button>
+            </div>
+            &nbsp;
+            &nbsp;
+            &nbsp;
+            <div class="price-display">
+                Price:<span style="font-weight: 700;" id="item1-price" id="price"></span>
+            </div>
+           
+            
+        </div>
+        
+    </div>
+    <div class="total-display">
+        Total: <span id="total"></span>
+    </div>
+    <!-- <div class="total">
+        Total:<span id="total-price">0</span>
+    </div> -->
+    <button class="proceed" onclick="proceed()">Proceed</button>
+    <button class="proceed" onclick="back()">Back to Shopping</button>
+
+    <script>
+        // Retrieve restaurant name from local storage
+        const fname = localStorage.getItem('foodname');
+        const fprice = localStorage.getItem('foodprice');
+
+        // Display welcome message
+
+ document.getElementById('fnm').innerHTML = fname;
+ document.getElementById('item1-price').innerHTML = fprice;
+
+        
+        function proceed() {
+            
+            window.location.href = 'check.html';
+            alert('Proceeding with the total price of ' + document.getElementById('total-price').innerText);
+        }
+        function back() {
+            
+            window.location.href = 'order.html';
+             }
+
+
+             document.addEventListener('DOMContentLoaded', (event) => {
+    let quantity = 0;
+    const basePrice = parseFloat(fprice); // Initial price of the item
+    let currentPrice = basePrice;
+    let total = currentPrice;
+
+    const quantityElement = document.getElementById('quantity');
+    // const priceElement = document.getElementById('price');
+    const priceElement = document.getElementById('item1-price')
+    const totalElement = document.getElementById('total');
+    const plusButton = document.getElementById('plus');
+    const minusButton = document.getElementById('minus');
+
+    function updateTotal() {
+        total = quantity * currentPrice;
+        totalElement.textContent = total.toFixed(2);
+    }
+
+    plusButton.addEventListener('click', () => {
+        if (quantity === 0) {
+            currentPrice *= 1; // Double the price if quantity goes from 0 to 1
+        }
+        quantity++;
+        quantityElement.textContent = quantity;
+        priceElement.textContent = currentPrice.toFixed(2);
+        updateTotal();
+    });
+
+    minusButton.addEventListener('click', () => {
+        if (quantity > 0) {
+            quantity--;
+            if (quantity === 0) {
+                currentPrice = basePrice; // Reset price if quantity goes back to 0
+            }
+            quantityElement.textContent = quantity;
+            priceElement.textContent = currentPrice.toFixed(2);
+            updateTotal();
+        }
+    });
+});
+
+
+
+
+
+
+
+        ///////////////
+
+
+
+
+        
+   
+        // Your Firebase configuration
+        const firebaseConfig = {
+            apiKey: "AIzaSyC-fZWJEr9XNMtYBIpqmJ1BOL2IDqZZHLQ",
+            authDomain: "food-database-9fbec.firebaseapp.com",
+            databaseURL: "https://food-database-9fbec-default-rtdb.firebaseio.com",
+            projectId: "food-database-9fbec",
+            storageBucket: "food-database-9fbec.appspot.com",
+            messagingSenderId: "82233837477",
+            appId: "1:82233837477:web:ec681d9fcca90e0aad0a4c",
+            measurementId: "G-7M683PGQC2"
+        };
+
+        // Initialize Firebase
+        firebase.initializeApp(firebaseConfig);
+        const db = firebase.firestore();
+
+        // Function to create and return a DOM element
+      
+
+        // Function to create and return a card element
+        function createCard(data, docId) {
+           
+
+
+            const nameElement = createElement('h2', null, data.Rname || 'No Name');
+            card.appendChild(nameElement);
+
+            const priceElement = createElement('p', null, `Price: ${data.Rprice || 'N/A'}`);
+            card.appendChild(priceElement);
+
+           console.log(nameElement);
+           console.log(priceElement);
+
+         
+            return card;
+        }
+
+        // Function to retrieve and display restaurant items
+        function displayRestaurantItems() {
+            db.collection('foods').get().then((querySnapshot) => {
+                const restaurantList = document.getElementById('restaurant-list');
+                restaurantList.innerHTML = '';
+                querySnapshot.forEach((doc) => {
+                    const data = doc.data();
+                    const card = createCard(data, doc.id);
+                    restaurantList.appendChild(card);
+                });
+            }).catch((error) => {
+                console.error("Error getting documents: ", error);
+                alert("Failed to load restaurant items. Please try again later.");
+            });
+        }
+
+    </script>
+    
+ 
+</body>
+</html>
